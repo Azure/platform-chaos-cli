@@ -27,8 +27,18 @@ describe('azure-chaos', () => {
         })
           .then(array => {
             assert.equal(array.length, 2)
+            var soughtExtension = seekExtension('testExtension1', array)
+            assert.equal(array[0].name, soughtExtension.name)
           }).then(done, done)
       })
     })
   })
 })
+
+function seekExtension (name, extensions) {
+  for (var i = 0, l = extensions.length; i < l; i++) {
+    if (extensions[i]._name === name) {
+      return extensions[i]
+    }
+  }
+}
