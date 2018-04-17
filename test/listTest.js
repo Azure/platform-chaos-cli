@@ -6,7 +6,7 @@ const fakeFs = require('memfs')
 
 describe('azure-chaos', () => {
   describe('ListTest', () => {
-    it('should properly list registered extensions', (done) => {
+    it('should properly populate a list of registered extensions', (done) => {
       factory.ExtensionRegistry.configure({
         fsLocation: '/temp',
         fsImpl: fakeFs
