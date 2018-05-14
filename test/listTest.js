@@ -4,10 +4,8 @@ const fakeFs = require('memfs')
 
 /* eslint-env node, mocha */
 
-// runs before all tests, regardless of which file they live in
-
 describe('List', () => {
-  it('should properly populate a list of registered extensions', (done) => {
+  it('should populate an accurate list of extensions', (done) => {
     fakeFs.vol.reset()
     factory.ExtensionRegistry.configure({
       fsLocation: '/temp',
@@ -29,16 +27,16 @@ describe('List', () => {
       })
         .then(array => {
           assert.equal(array.length, 2)
-          var soughtExtension = seekExtension('testExtension1', array)
-          assert.equal(array[0].name, soughtExtension.name)
+          var soughtExtension = seekExtension('testExtension1', 'testUri1', 'testDesc1', array)
+          assert.equal(array[0], soughtExtension)
         }).then(done, done)
     })
   })
 })
 
-function seekExtension (name, extensions) {
+function seekExtension (name, uri, desc, extensions) {
   for (var i = 0, l = extensions.length; i < l; i++) {
-    if (extensions[i]._name === name) {
+    if (extensions[i]._name === name && extensions[i]._uri === uri && extensions[i]._desc === desc) {
       return extensions[i]
     }
   }
