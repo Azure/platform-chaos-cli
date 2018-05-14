@@ -4,33 +4,34 @@ const fakeFs = require('memfs')
 
 /* eslint-env node, mocha */
 
-describe('azure-chaos', () => {
-  describe('ListTest', () => {
-    it('should properly populate a list of registered extensions', (done) => {
-      factory.ExtensionRegistry.configure({
-        fsLocation: '/temp',
-        fsImpl: fakeFs
-      })
-      const instance = factory.ExtensionRegistry.create()
+// runs before all tests, regardless of which file they live in
 
+describe('List', () => {
+  it('should properly populate a list of registered extensions', (done) => {
+    fakeFs.vol.reset()
+    factory.ExtensionRegistry.configure({
+      fsLocation: '/temp',
+      fsImpl: fakeFs
+    })
+    const instance = factory.ExtensionRegistry.create()
+
+    instance.register({
+      extensionName: 'testExtension1',
+      extensionUri: 'testUri1',
+      extensionDesc: 'testDesc1'
+    }).then(() => {
       instance.register({
-        extensionName: 'testExtension1',
-        extensionUri: 'testUri1',
-        extensionDesc: 'testDesc1'
+        extensionName: 'testExtension2',
+        extensionUri: 'testUri2',
+        extensionDesc: 'testDesc2'
       }).then(() => {
-        instance.register({
-          extensionName: 'testExtension2',
-          extensionUri: 'testUri2',
-          extensionDesc: 'testDesc2'
-        }).then(() => {
-          return instance.getAll()
-        })
-          .then(array => {
-            assert.equal(array.length, 2)
-            var soughtExtension = seekExtension('testExtension1', array)
-            assert.equal(array[0].name, soughtExtension.name)
-          }).then(done, done)
+        return instance.getAll()
       })
+        .then(array => {
+          assert.equal(array.length, 2)
+          var soughtExtension = seekExtension('testExtension1', array)
+          assert.equal(array[0].name, soughtExtension.name)
+        }).then(done, done)
     })
   })
 })
