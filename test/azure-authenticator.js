@@ -47,14 +47,14 @@ describe('azure-chaos', () => {
         authKey: 'testAuthKey',
         accessToken: 'testAccessToken'
       }).then((res) => {
-        assert.equal(res.calledUri, testUri + '/start' + '?code=testAuthKey')
+        assert.equal(res.calledUri, `${testUri}/start?code=testAuthKey`)
         assert.equal(res.options.body.accessToken, 'testAccessToken')
         assert.equal(res.options.body.resources, 'test/samplegroup/sampleresourceid')
       })
         .then(done, done)
     })
 
-    it('should handle a null passed in as an extension uri', (done) => {
+    it('should fail when a null is passed in as an extension uri', (done) => {
       factory.RequestProcessor.configure({
         requestImpl: {
           post: (calledUri, options, cb) => {
@@ -65,16 +65,18 @@ describe('azure-chaos', () => {
       })
 
       const instance = factory.RequestProcessor.create()
-      const testUri = null
-      const testResource = 'test/samplegroup/sampleresourceid'
-      const testAuthKey = 'testAuthKey'
-      const testAccessToken = 'testAccessToken'
+      const testObject = {
+        expectedExtensionUri: null,
+        expectedResources: 'test/samplegroup/sampleresourceid',
+        expectedAuthKey: 'testAuthKey',
+        expectedAccessToken: 'testAccessToken'
+      }
 
       instance.start({
-        extensionUri: testUri,
-        resources: testResource,
-        authKey: testAuthKey,
-        accessToken: testAccessToken
+        extensionUri: testObject.expectedExtensionUri,
+        resources: testObject.expectedResources,
+        authKey: testObject.expectedAuthKey,
+        accessToken: testObject.expectedAccessToken
       }).then((res) => {
         assert.throws(res.calledUri, null)
       })
