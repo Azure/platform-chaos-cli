@@ -49,7 +49,7 @@ Creates and/or updates a `~/.chaos-extensions.json` file. This file represents
 all the extensions the tool is aware of and able to run. Use __register__ to add new extensions:
 
 ```
-azchaos register myextension https://myextension.com "a description of my extension"
+chaos register myextension https://myextension.com "a description of my extension"
 ```
 
 ### list
@@ -57,7 +57,7 @@ azchaos register myextension https://myextension.com "a description of my extens
 Lists all the registered extensions by printing them to `stdout`. Optionally filters by `search` term.
 
 ```
-azchaos list [search]
+chaos list [search]
 ```
 
 ### unregister
@@ -66,7 +66,7 @@ Updates a `~/.chaos-extensions.json` file. This file represents
 all the extensions the tool is aware of and able to run. Use __unregister__ to remove extensions:
 
 ```
-azchaos unregister myextension
+chaos unregister myextension
 ```
 
 ### start
@@ -77,7 +77,7 @@ Optionally, the `--accessToken` argument may be provided, accepting an Azure acc
 If `--accessToken` is not provided, the caller will be prompted to login interactively.
 
 ```
-azchaos start myextension --resources "subId/resGroupName/resName","subId/resGroupName/resName2"
+chaos start myextension --resources "subId/resGroupName/resName","subId/resGroupName/resName2"
 ```
 
 ### stop
@@ -88,7 +88,7 @@ Optionally, the `--accessToken` argument may be provided, accepting an Azure acc
 If `--accessToken` is not provided, the caller will be prompted to login interactively.
 
 ```
-azchaos stop myextension --resources "subId/resGroupName/resName","subId/resGroupName/resName2"
+chaos stop myextension --resources "subId/resGroupName/resName","subId/resGroupName/resName2"
 ```
 
 ### resgen
@@ -98,7 +98,7 @@ and (still optionally) an Azure resource name. The resulting tri-part string (in
 will be output to `stdout`.
 
 ```
-azchaos resGen mySubId myResGroupName myResName
+chaos resGen mySubId myResGroupName myResName
 ```
 
 ### token
@@ -106,7 +106,7 @@ azchaos resGen mySubId myResGroupName myResName
 Interactively authenticates the user, and prints the valid `accessToken` to `stdout`. This `accessToken` can be used as the `--accessToken <value>` in the [start](#start) and [stop](#stop) commands.
 
 ```
-azchaos token
+chaos token
 ```
 
 ## Related Projects
