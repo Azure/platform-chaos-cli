@@ -1,9 +1,12 @@
 const assert = require('assert')
 const factory = require('../').factory
-
+const logger = require('../lib/logger')
 /* eslint-env node, mocha */
 
 describe('RequestProcessor', () => {
+  beforeEach(() => {
+    logger.configure({ logImpl: () => null }) // noop logger by default
+  })
   it('should successfully transform an extension uri', (done) => {
     factory.RequestProcessor.configure({
       requestImpl: {
@@ -85,5 +88,39 @@ describe('RequestProcessor', () => {
       assert.equal(res.calledUri, testUri + '/start' + '?code=testAuthKey')
     })
       .then(done, done)
+  })
+
+  it('should properly audit every event initiation and termination', (done) => {
+    factory.RequestProcessor.configure({
+      requestImpl: {
+        post: (calledUri, options, cb) => {
+          const response = { calledUri, options }
+          return cb(null, response)
+        }
+      }
+    })
+
+    logger.configure({
+      logImpl: (message) => {
+        assert.ok(typeof message === 'string')
+        assert.ok(/\[LOG\]/.test(message))
+      }
+    })
+
+    const instance = factory.RequestProcessor.create()
+
+    const testUri = 'testUri/sample'
+    const testResource = 'test/group/name'
+    const testAuthKey = 'testAuthKeyabc123456789'
+    const testAccessToken = 'testAccessTokenabc123456789'
+
+    instance.start({
+      extensionUri: testUri,
+      resources: testResource,
+      authKey: testAuthKey,
+      accessToken: testAccessToken
+    }).then(res => {
+      assert.ok(typeof res === 'object')
+    }).then(done, done)
   })
 })

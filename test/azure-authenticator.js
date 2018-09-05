@@ -1,9 +1,10 @@
 const assert = require('assert')
 const factory = require('../').factory
-
+const logger = require('../lib/logger')
 /* eslint-env node, mocha */
 
 describe('azure-chaos', () => {
+  beforeEach(() => logger.configure({ logImpl: () => null })) // noop by default
   describe('AzureAuthenticator', () => {
     it('should parse and format token successfully', (done) => {
       factory.AzureAuthenticator.configure({
