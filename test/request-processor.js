@@ -56,8 +56,8 @@ describe('RequestProcessor', () => {
       resources: testObject.expectedResources,
       authKey: testObject.expectedAuthKey,
       accessToken: testObject.expectedAccessToken
-    }).then((res) => {
-      assert.throws(res.calledUri, null)
+    }).then(null, err => {
+      assert.equal(err.message, 'ExtensionUri is a required string argument')
     })
       .then(done, done)
   })
