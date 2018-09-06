@@ -4,6 +4,7 @@ const home = require('home')
 const yargs = require('yargs')
 const factory = require('../lib/factory')
 const pkgJson = require('../package.json')
+const logger = require('../lib/logger')
 
 // configure the factory for runtime
 // this injects our production dependencies
@@ -14,7 +15,7 @@ factory.ExtensionRegistry.configure({
   fsImpl: require('fs'),
   fsLocation: home.resolve('~/.chaos-extensions.json')
 })
-factory.Logger.configure({
+logger.configure({
   logImpl: console.log
 })
 factory.AzureAuthenticator.configure({
