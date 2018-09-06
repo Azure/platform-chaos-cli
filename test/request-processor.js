@@ -1,12 +1,12 @@
 const assert = require('assert')
 const factory = require('../').factory
 const logger = require('../lib/logger')
+const sinon = require('sinon')
 /* eslint-env node, mocha */
 
 describe('RequestProcessor', () => {
-  beforeEach(() => {
-    logger.configure({ logImpl: () => null }) // noop logger by default
-  })
+  beforeEach(() => logger.configure({ logImpl: () => null })) // noop by default
+
   it('should successfully transform an extension uri', (done) => {
     factory.RequestProcessor.configure({
       requestImpl: {
@@ -29,8 +29,7 @@ describe('RequestProcessor', () => {
       assert.equal(res.calledUri, `${testUri}/start?code=testAuthKey`)
       assert.equal(res.options.body.accessToken, 'testAccessToken')
       assert.equal(res.options.body.resources, 'test/samplegroup/sampleresourceid')
-    })
-      .then(done, done)
+    }).then(done, done)
   })
 
   it('should fail when a null is passed in as an extension uri', (done) => {
@@ -58,8 +57,7 @@ describe('RequestProcessor', () => {
       accessToken: testObject.expectedAccessToken
     }).then(null, err => {
       assert.equal(err.message, 'ExtensionUri is a required string argument')
-    })
-      .then(done, done)
+    }).then(done, done)
   })
 
   it('should handle a backslash passed in an extension uri', (done) => {
@@ -86,8 +84,7 @@ describe('RequestProcessor', () => {
       accessToken: testAccessToken
     }).then((res) => {
       assert.equal(res.calledUri, testUri + '/start' + '?code=testAuthKey')
-    })
-      .then(done, done)
+    }).then(done, done)
   })
 
   it('should properly audit every event initiation and termination', (done) => {
@@ -100,11 +97,13 @@ describe('RequestProcessor', () => {
       }
     })
 
+    const logImpl = sinon.spy(message => {
+      assert.ok(typeof message === 'string')
+      assert.ok(/\[LOG\]/.test(message))
+    })
+
     logger.configure({
-      logImpl: (message) => {
-        assert.ok(typeof message === 'string')
-        assert.ok(/\[LOG\]/.test(message))
-      }
+      logImpl: logImpl
     })
 
     const instance = factory.RequestProcessor.create()
@@ -121,6 +120,9 @@ describe('RequestProcessor', () => {
       accessToken: testAccessToken
     }).then(res => {
       assert.ok(typeof res === 'object')
+      assert.ok(logImpl.called)
+    }, err => {
+      assert.fail(`Should not receive err ${err.message}`)
     }).then(done, done)
   })
 })

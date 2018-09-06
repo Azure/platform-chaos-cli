@@ -5,6 +5,7 @@ const logger = require('../lib/logger')
 
 describe('azure-chaos', () => {
   beforeEach(() => logger.configure({ logImpl: () => null })) // noop by default
+
   describe('AzureAuthenticator', () => {
     it('should parse and format token successfully', (done) => {
       factory.AzureAuthenticator.configure({
@@ -51,8 +52,7 @@ describe('azure-chaos', () => {
         assert.equal(res.calledUri, `${testUri}/start?code=testAuthKey`)
         assert.equal(res.options.body.accessToken, 'testAccessToken')
         assert.equal(res.options.body.resources, 'test/samplegroup/sampleresourceid')
-      })
-        .then(done, done)
+      }).then(done, done)
     })
 
     it('should fail when a null is passed in as an extension uri', (done) => {
@@ -80,8 +80,7 @@ describe('azure-chaos', () => {
         accessToken: testObject.expectedAccessToken
       }).then(null, err => {
         assert.equal(err.message, 'ExtensionUri is a required string argument')
-      })
-        .then(done, done)
+      }).then(done, done)
     })
 
     it('should handle a backslash passed in an extension uri', (done) => {
@@ -108,8 +107,7 @@ describe('azure-chaos', () => {
         accessToken: testAccessToken
       }).then((res) => {
         assert.equal(res.calledUri, testUri + '/start' + '?code=testAuthKey')
-      })
-        .then(done, done)
+      }).then(done, done)
     })
   })
 })

@@ -59,6 +59,3 @@ typings/
 
 # launch parameters
 launch.json
-
-# VS Code
-.vscode/*
