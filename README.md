@@ -71,8 +71,12 @@ chaos unregister myextension
 
 ### start
 
-__Start__ is a registered chaos extension, effectively enabling a chaotic event. This command requires
-that a `--resources` argument is given, accepting an array of comma-separated resource identifier strings.
+__Start__ is a registered chaos extension, effectively enabling a chaotic event. 
+
+This command requires that a `--resources` argument is given, accepting an array of resource identifier strings.
+
+For example: `--resources abc/123/def zyx/456/wvu`
+
 Optionally, the `--accessToken` argument may be provided, accepting an Azure access token in the form of `Bearer <token>`.
 If `--accessToken` is not provided, the caller will be prompted to login interactively.
 
@@ -82,8 +86,12 @@ chaos start myextension --resources "subId/resGroupName/resName","subId/resGroup
 
 ### stop
 
-__Stop__ is a registered chaos extension, effectively disabling a chaotic event. This command requires
-that a `--resources` argument is given, accepting an array of comma-separated resource identifier strings.
+__Stop__ is a registered chaos extension, effectively disabling a chaotic event. 
+
+This command requires that a `--resources` argument is given, accepting an array of resource identifier strings.
+
+For example: `--resources abc/123/def zyx/456/wvu`
+
 Optionally, the `--accessToken` argument may be provided, accepting an Azure access token in the form of `Bearer <token>`.
 If `--accessToken` is not provided, the caller will be prompted to login interactively.
 
