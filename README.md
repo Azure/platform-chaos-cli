@@ -71,8 +71,9 @@ chaos unregister myextension
 
 ### start
 
-__Start__ is a registered chaos extension, effectively enabling a chaotic event. This command requires
-that a `--resources` argument is given, accepting an array of resource identifier strings.
+__Start__ is a registered chaos extension, effectively enabling a chaotic event. 
+
+This command requires that a `--resources` argument is given, accepting an array of resource identifier strings.
 
 For example: `--resources abc/123/def zyx/456/wvu`
 
@@ -85,8 +86,9 @@ chaos start myextension --resources "subId/resGroupName/resName","subId/resGroup
 
 ### stop
 
-__Stop__ is a registered chaos extension, effectively disabling a chaotic event. This command requires
-that a `--resources` argument is given, accepting an array of resource identifier strings.
+__Stop__ is a registered chaos extension, effectively disabling a chaotic event. 
+
+This command requires that a `--resources` argument is given, accepting an array of resource identifier strings.
 
 For example: `--resources abc/123/def zyx/456/wvu`
 
