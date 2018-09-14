@@ -1,4 +1,4 @@
-# platform-chaos
+# platform-chaos-cli
 
 [![Build Status](https://travis-ci.org/azure/platform-chaos-cli.svg?branch=master)](https://travis-ci.org/azure/platform-chaos-cli)
 
