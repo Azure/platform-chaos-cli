@@ -7,9 +7,12 @@
     "chaos": "bin/chaos.js"
   },
   "dependencies": {
+    "azure-arm-scheduler": "^1.2.0-preview",
     "chalk": "^2.3.2",
+    "datejs": "^1.0.0-rc3",
     "home": "^1.0.1",
     "ms-rest-azure": "^2.5.5",
+    "random-js": "^1.0.8",
     "request": "^2.85.0",
     "table": "^4.0.3",
     "uuid": "^3.3.2",

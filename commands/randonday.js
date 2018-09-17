@@ -1,9 +1,11 @@
 const factory = require('../lib/factory')
 var moment = require('moment')
-var Random = require('random-js')
+// var Random = require('random-js')
 var scheduler = require('azure-arm-scheduler')
+var msRestAzure = require('ms-rest-azure')
+const randSched = require('../lib/random-schedule')
 
-var random = new Random(Random.engines.browserCrypto)
+// var random = new Random(Random.engines.browserCrypto)
 
 exports.command = 'randonday <extension> [date] [open] [close]'
 
@@ -19,53 +21,93 @@ exports.builder = {
         required: true
     },
     open: {
-        description: 'the starting hour of a specified time window, in 24hr format (ie 8:00)',
+        description: 'the starting hour of a specified time window, in 24hr format (ie 8:00)\nif left blank defaults to 00:00',
         type: 'string',
-        required: true
+        required: false
     },
     close: {
-        description: 'the final hour of a specified time window, in 24hr format (ie 17:00)',
+        description: 'the final hour of a specified time window, in 24hr format (ie 17:00)\nif left blank defaults to 23:59',
         type: 'string',
-        required: true
+        required: false
     }
 }
 
 exports.handler = (argv) => {
-    // const authenticator = factory.AzureAuthenticator.create()
-    // const registry = factory.ExtensionRegistry.create()
-    // const rp = factory.RequestProcessor.create()
+    const authenticator = factory.AzureAuthenticator.create()
+    const registry = factory.ExtensionRegistry.create()
+    const rp = factory.RequestProcessor.create()
 
-    // const asyncAuthProvider = argv.accessToken ? Promise.resolve(argv.accessToken) : authenticator.interactive()
-    // // var client = new SchedulerClient
+    const asyncAuthProvider = argv.accessToken ? Promise.resolve(argv.accessToken) : authenticator.interactive()
 
     const parts = [
         argv.extension,
         argv.date,
         argv.open,
-        argv.close
+        argv.close, 
+        argv.accessToken
     ]
 
-    startdate = moment(argv.date)
-    console.log('start date', startdate)
-    startTime = argv.open
-    console.log('start time', startTime)
-    startTimeArray = startTime.split(':')
-    startSeconds = 3600*startTimeArray[0] + 60*startTimeArray[1]
-    startTime = startdate.add(startSeconds, 'seconds').unix().valueOf()
-    console.log('startdate unix', startTime)
+    startdate = moment(parts[1])
+    starttime = parts[2] !== undefined ? parts[2] : '0:00' 
+    // startTimeArray = starttime.split(':')
+    // startSeconds = 3600*startTimeArray[0] + 60*startTimeArray[1]
+    startSeconds = randSched.calcSeconds(starttime)
+    starttime = startdate.add(startSeconds, 'seconds').unix().valueOf()
+    console.log('startdate unix', starttime)
 
-    endDate = moment(argv.date)
-    endtime = argv.close.split(':')
-    console.log('startdate ->', startdate)
-    console.log('end date ->', endDate)
-    endSeconds = 3600*endtime[0] + 60*endtime[1]
+    endDate = moment(parts[1])
+    endTime = parts[3] !== undefined ? parts[3] : '23:59'
+    // endSeconds = 3600*endTime[0] + 60*endTime[1]
+    endSeconds = randSched.calcSeconds(endTime)
     endTime = endDate.add(endSeconds, 'seconds').unix().valueOf()
     console.log('endtime unix', endTime)
 
-    randtime = random.integer(startTime, endTime)
+    // randtime = random.integer(starttime, endTime)
+    randtime = randSched.calcRandomSecond(starttime, endTime)
     console.log('random time in secs', randtime)
-    console.log('formated time', moment.unix(randtime))
+    console.log('ISO Format => ', moment(moment.unix(randtime)).toISOString())
+    
+    //create a scheduled job needs: 
+    //   time as ISO
+    //   job to run
+
+    return registry
+        .get({extensionName: parts[1]})
+        .then((ext) => {
+            console.log('poop')
+        })
+    // msRestAzure.interactiveLogin().then(credentials => {
+    //     // Create a scheduler from the login credentials
+    //     let client = new SchedulerManagement(credentials, 'your-subscription-id')
+    //     // Get the full list of current jobs for the subscription
+    //     jobScheduler = new jobOperations(client)
+    //     jobScheduler.create(
+    //         //parameters:
+    //         {
+    //             startTime: moment(moment.unix(randtime)).toISOString(),
+    //             action: {
+    //                 type: 'https',
+    //                 retryPolicy:,
+    //                 errorAction:,
+    //                 request: {
+    //                     uri:'',
+    //                     method:'',
+    //                     auhentication:'',
+    //                     headers: '',
+    //                     body: ''
+    //                 },
+    //                 queueMessage:
+    //             }
+    //         },
+    //         //callback
+    //         {}
+    //     )
+    // }).then(currentJobs => {
+    //     console.log("Current jobs:")
+    //     console.dir(currentJobs, {depth:null, colors:true})
+    // }).catch(error => {
+    //     console.log("An error occurred:")
+    //     console.dir(error, {depth:null, colors:true})
+    // })
 
 }
-
-// // upper bound of randomly generated time ? like 1 month? 2628000

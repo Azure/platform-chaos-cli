@@ -1,10 +1,11 @@
 const factory = require('../lib/factory')
 var moment = require('moment')
-var Random = require('random-js')
+// var Random = require('random-js')
 require('../node_modules/datejs/index.js')
 // var scheduler = require('azure-arm-scheduler')
+require('../lib/random-schedule')
 
-var random = new Random(Random.engines.browserCrypto)
+// var random = new Random(Random.engines.browserCrypto)
 
 // exports.command = 'randwindow <extension> [days] [open] [close]'
 exports.command = 'randwindow <extension> [days] [open] [close]'
@@ -44,52 +45,51 @@ exports.handler = (argv) => {
         argv.close
     ]
 
-    //daysWindow = argv.days.split('')
-
-    console.log(argv.days)
-    inputDays = argv.days.split('')
-    var days = []
-    for (i = 0; i < inputDays.length; i++) {
-        var whatDay = inputDays[i]
-        switch (whatDay) {
-            case 'M':
-                days[i] = 'Monday'
-                break
-            case 'T':
-                days[i] = 'Tuesday'
-                break
-            case 'W':
-                days[i] = 'Wednesday'
-                break
-            case 'R':
-                days[i] = 'Thursday'
-                break
-            case 'F':
-                days[i] = 'Friday'
-                break
-            case 'S':
-                days[i] = 'Saturday'
-                break
-            case 'U':
-                days[i] = 'Sunday'
-                break
-        }
-    }
-    var randDay = random.integer(0, days.length-1)
-    console.log('random day', randDay)
-    var upcomingDay = 'next ' + days[randDay]
-    console.log(upcomingDay)
+    inputDays = parts[1].split('')
+    // var days = []
+    // for (i = 0; i < inputDays.length; i++) {
+    //     var whatDay = inputDays[i]
+    //     switch (whatDay) {
+    //         case 'M':
+    //             days[i] = 'Monday'
+    //             break
+    //         case 'T':
+    //             days[i] = 'Tuesday'
+    //             break
+    //         case 'W':
+    //             days[i] = 'Wednesday'
+    //             break
+    //         case 'R':
+    //             days[i] = 'Thursday'
+    //             break
+    //         case 'F':
+    //             days[i] = 'Friday'
+    //             break
+    //         case 'S':
+    //             days[i] = 'Saturday'
+    //             break
+    //         case 'U':
+    //             days[i] = 'Sunday'
+    //             break
+    //     }
+    //     //what if user puts in garbage?
+    // }
+    // var randDay = random.integer(0, days.length-1)
+    // var upcomingDay = 'next ' + days[randDay]
+    upcomingDay = randomNextDay(inputDays)
     var upcomingDate = moment(Date.parse(upcomingDay))
-    console.log('Moment says upcoming day is', upcomingDate)
 
-    opentime = argv.open
-    openTimeArray = opentime.split(':')
-    startSeconds = 3600*openTimeArray[0] + 60*openTimeArray[1]
+    opentime = parts[2]
+    // openTimeArray = opentime.split(':')
+    // startSeconds = 3600*openTimeArray[0] + 60*openTimeArray[1]
+    startSeconds = calcSeconds(opentime)
 
-    closetime = argv.close
-    closeTimeArray = closetime.split(':')
-    closeSeconds = 3600*closeTimeArray[0] + 60*closeTimeArray[1]
-    randTime = random.integer(startSeconds, closeSeconds)
+    closetime = parts[3]
+    // closeTimeArray = closetime.split(':')
+    // closeSeconds = 3600*closeTimeArray[0] + 60*closeTimeArray[1]
+    closeSeconds = calcSeconds(closetime)
+    // randTime = random.integer(startSeconds, closeSeconds)
+    randTime = calcRandomSecond(startSeconds, closeSeconds)
 
     console.log('random time in seconds', randTime)
     console.log('Random in a time window', moment(upcomingDate).add(randTime, 'seconds'))
