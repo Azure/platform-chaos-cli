@@ -1,10 +1,9 @@
 const factory = require('../lib/factory')
+const logger = require('../lib/logger')
 var moment = require('moment')
-// var Random = require('random-js')
 var scheduler = require('azure-arm-scheduler')
 require('../lib/random-schedule')
-
-// var random = new Random(Random.engines.browserCrypto)
+const randSched = require('../lib/random-schedule')
 
 exports.command = 'randfuture <extension>'
 
@@ -24,8 +23,7 @@ exports.handler = (argv) => {
     // const asyncAuthProvider = argv.accessToken ? Promise.resolve(argv.accessToken) : authenticator.interactive()
     // // var client = new SchedulerClient
 
-    // secondsInterval = random.integer(1, 2638000)
-    secondsInterval = calcRandomSecond(1, 2638000)
+    secondsInterval = randSched.calcRandomSecond(1, 2638000)
     scheduledTime = moment().add(secondsInterval, 'seconds')
     console.log('Random point within in a month:', scheduledTime)
 }
