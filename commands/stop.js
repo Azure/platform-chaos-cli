@@ -1,4 +1,5 @@
 const factory = require('../lib/factory')
+const logger = require('../lib/logger')
 
 exports.command = 'stop <extension> [key]'
 
@@ -30,7 +31,6 @@ exports.handler = (argv) => {
   const authenticator = factory.AzureAuthenticator.create()
   const registry = factory.ExtensionRegistry.create()
   const rp = factory.RequestProcessor.create()
-  const logger = factory.Logger.create()
 
   const asyncAuthProvider = argv.accessToken ? Promise.resolve(argv.accessToken) : authenticator.interactive()
 

@@ -1,4 +1,5 @@
 const factory = require('../lib/factory')
+const logger = require('../lib/logger')
 
 exports.command = 'unregister <name>'
 
@@ -12,7 +13,6 @@ exports.builder = {
 
 exports.handler = (argv) => {
   const registry = factory.ExtensionRegistry.create()
-  const logger = factory.Logger.create()
 
   return registry
     .unregister({
