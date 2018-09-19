@@ -1,6 +1,6 @@
 # platform-chaos-cli
 
-[![Build Status](https://travis-ci.org/azure/platform-chaos-cli.svg?branch=master)](https://travis-ci.org/azure/platform-chaos-cli)
+[![Build Status](https://travis-ci.org/Azure/platform-chaos-cli.svg?branch=master)](https://travis-ci.org/Azure/platform-chaos-cli)
 
 A tool for introducing chaos into PaaS offerings using configurable extensions. ⚙️ 🌩 
 
