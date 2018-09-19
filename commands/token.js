@@ -1,4 +1,5 @@
 const factory = require('../lib/factory')
+const logger = require('../lib/logger')
 
 exports.command = 'token'
 
@@ -8,7 +9,6 @@ exports.builder = {}
 
 exports.handler = (argv) => {
   const authenticator = factory.AzureAuthenticator.create()
-  const logger = factory.Logger.create()
 
   return authenticator
     .interactive()

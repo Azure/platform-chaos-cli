@@ -1,4 +1,5 @@
 const factory = require('../lib/factory')
+const logger = require('../lib/logger')
 
 exports.command = 'resgen <subId> [resGroup] [resName]'
 
@@ -17,7 +18,6 @@ exports.builder = {
 }
 
 exports.handler = (argv) => {
-  const logger = factory.Logger.create()
 
   const parts = [
     argv.subId,

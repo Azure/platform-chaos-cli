@@ -1,4 +1,5 @@
 const factory = require('../lib/factory')
+const logger = require('../lib/logger')
 const table = require('table')
 
 exports.command = 'list [search]'
@@ -13,7 +14,6 @@ exports.builder = {
 
 exports.handler = (argv) => {
   const registry = factory.ExtensionRegistry.create()
-  const logger = factory.Logger.create()
 
   const term = (argv.search || '').toString()
 
