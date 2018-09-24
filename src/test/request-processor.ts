@@ -1,7 +1,13 @@
-const assert = require('assert')
-const factory = require('../').factory
-const logger = require('../lib/logger')
-const sinon = require('sinon')
+import * as assert from 'assert'
+import * as sinon from 'sinon'
+
+import index from '../'
+import logger from '../lib/logger'
+
+const factory = index.factory
+// const factory = require('../').factory
+// const logger = require('../lib/logger')
+
 /* eslint-env node, mocha */
 
 describe('RequestProcessor', () => {
@@ -11,7 +17,7 @@ describe('RequestProcessor', () => {
     factory.RequestProcessor.configure({
       requestImpl: {
         post: (calledUri, options, cb) => {
-          var response = {calledUri, options}
+          const response = { calledUri, options }
           return cb(null, response)
         }
       }
@@ -21,10 +27,10 @@ describe('RequestProcessor', () => {
     const testUri = 'testUri/sample'
 
     instance.start({
-      extensionUri: testUri,
-      resources: 'test/samplegroup/sampleresourceid',
+      accessToken: 'testAccessToken',
       authKey: 'testAuthKey',
-      accessToken: 'testAccessToken'
+      extensionUri: testUri,
+      resources: 'test/samplegroup/sampleresourceid'
     }).then((res) => {
       assert.equal(res.calledUri, `${testUri}/start?code=testAuthKey`)
       assert.equal(res.options.body.accessToken, 'testAccessToken')
@@ -36,7 +42,7 @@ describe('RequestProcessor', () => {
     factory.RequestProcessor.configure({
       requestImpl: {
         post: (calledUri, options, cb) => {
-          var response = {calledUri, options}
+          const response = { calledUri, options }
           return cb(null, response)
         }
       }
@@ -44,18 +50,18 @@ describe('RequestProcessor', () => {
 
     const instance = factory.RequestProcessor.create()
     const testObject = {
-      expectedExtensionUri: null,
-      expectedResources: 'test/samplegroup/sampleresourceid',
+      expectedAccessToken: 'testAccessToken',
       expectedAuthKey: 'testAuthKey',
-      expectedAccessToken: 'testAccessToken'
+      expectedExtensionUri: null,
+      expectedResources: 'test/samplegroup/sampleresourceid'
     }
 
     instance.start({
-      extensionUri: testObject.expectedExtensionUri,
-      resources: testObject.expectedResources,
+      accessToken: testObject.expectedAccessToken,
       authKey: testObject.expectedAuthKey,
-      accessToken: testObject.expectedAccessToken
-    }).then(null, err => {
+      extensionUri: testObject.expectedExtensionUri,
+      resources: testObject.expectedResources
+    }).then(null, (err) => {
       assert.equal(err.message, 'ExtensionUri is a required string argument')
     }).then(done, done)
   })
@@ -64,7 +70,7 @@ describe('RequestProcessor', () => {
     factory.RequestProcessor.configure({
       requestImpl: {
         post: (calledUri, options, cb) => {
-          var response = {calledUri, options}
+          const response = { calledUri, options }
           return cb(null, response)
         }
       }
@@ -78,10 +84,10 @@ describe('RequestProcessor', () => {
     const testAccessToken = 'testAccessToken'
 
     instance.start({
-      extensionUri: testUri,
-      resources: testResource,
+      accessToken: testAccessToken,
       authKey: testAuthKey,
-      accessToken: testAccessToken
+      extensionUri: testUri,
+      resources: testResource
     }).then((res) => {
       assert.equal(res.calledUri, testUri + '/start' + '?code=testAuthKey')
     }).then(done, done)
@@ -97,13 +103,13 @@ describe('RequestProcessor', () => {
       }
     })
 
-    const logImpl = sinon.spy(message => {
+    const logImpl = sinon.spy((message) => {
       assert.ok(typeof message === 'string')
       assert.ok(/\[LOG\]/.test(message))
     })
 
     logger.configure({
-      logImpl: logImpl
+      logImpl
     })
 
     const instance = factory.RequestProcessor.create()
@@ -114,14 +120,14 @@ describe('RequestProcessor', () => {
     const testAccessToken = 'testAccessTokenabc123456789'
 
     instance.start({
-      extensionUri: testUri,
-      resources: testResource,
+      accessToken: testAccessToken,
       authKey: testAuthKey,
-      accessToken: testAccessToken
-    }).then(res => {
+      extensionUri: testUri,
+      resources: testResource
+    }).then((res) => {
       assert.ok(typeof res === 'object')
       assert.ok(logImpl.called)
-    }, err => {
+    }, (err) => {
       assert.fail(`Should not receive err ${err.message}`)
     }).then(done, done)
   })
