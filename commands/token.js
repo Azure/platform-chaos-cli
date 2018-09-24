@@ -11,6 +11,6 @@ exports.handler = (argv) => {
   const logger = factory.Logger.create()
 
   return authenticator
-    .interactive()
+    .interactiveToken()
     .then(logger.info.bind(logger), logger.error.bind(logger))
 }
