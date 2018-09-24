@@ -22,7 +22,7 @@ exports.handler = (argv) => {
   const authenticator = factory.AzureAuthenticator.create()
   const registry = factory.ExtensionRegistry.create()
 
-  const asyncAuthProvider = argv.accessToken ? Promise.resolve(argv.accessToken) : authenticator.interactiveCredentials()
+  const asyncAuthProvider = argv.accessToken ? Promise.resolve(argv.accessToken) : authenticator.interactive()
 
   var secondsInterval = randSched.calcRandomSecond(1, 2638000)
   var scheduledTime = moment().add(secondsInterval, 'seconds')
