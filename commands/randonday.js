@@ -1,4 +1,5 @@
 const factory = require('../lib/factory')
+const logger = require('../lib/logger')
 var moment = require('moment')
 const randSched = require('../lib/random-schedule')
 
@@ -36,7 +37,7 @@ exports.handler = (argv) => {
   const authenticator = factory.AzureAuthenticator.create()
   const registry = factory.ExtensionRegistry.create()
 
-  const asyncAuthProvider = argv.accessToken ? Promise.resolve(argv.accessToken) : authenticator.interactiveCredentials()
+  const asyncAuthProvider = argv.accessToken ? Promise.resolve(argv.accessToken) : authenticator.interactive()
 
   var startdate = moment(argv.date)
   var starttime = argv.open !== undefined ? argv.open : '0:00'
@@ -49,7 +50,6 @@ exports.handler = (argv) => {
   endTime = endDate.add(endSeconds, 'seconds').unix().valueOf()
 
   var randtime = randSched.calcRandomSecond(starttime, endTime)
-  console.log('ISO Format => ', moment(moment.unix(randtime)).toISOString())
 
   var resources = argv.resources.split('/')
   var subscriptionId = resources[0]
@@ -66,13 +66,18 @@ exports.handler = (argv) => {
             subscriptionId,
             resourceGroupName,
             jobCollection,
+            argv.extension,
             ext.uri,
-            moment(randtime).toISOString())
-          // .then() convey success
+            moment(moment.unix(randtime)).toISOString())
         })
+    })
+    .then((res) => {
+      var response = res.properties.state === 'enabled' ? 'Successfully scheduled' : 'Attempted scheduling failed'
+      console.log(response)
     })
     .catch(error => {
       console.log('An error occurred:')
       console.dir(error, {depth: null, colors: true})
     })
+    .then(logger.info.bind(logger), logger.error.bind(logger))
 }

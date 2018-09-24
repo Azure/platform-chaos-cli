@@ -48,8 +48,13 @@ exports.handler = (argv) => {
           )
         })
     })
+    .then((res) => {
+      var response = res.properties.state === 'enabled' ? 'Successfully scheduled' : 'Attempted scheduling failed'
+      console.log(response)
+    })
     .catch(error => {
       console.log('An error occurred:')
       console.dir(error, {depth: null, colors: true})
     })
+    .then(logger.info.bind(logger), logger.error.bind(logger))
 }
