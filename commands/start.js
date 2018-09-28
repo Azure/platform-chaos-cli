@@ -32,7 +32,7 @@ exports.handler = (argv) => {
   const registry = factory.ExtensionRegistry.create()
   const rp = factory.RequestProcessor.create()
 
-  const asyncAuthProvider = argv.accessToken ? Promise.resolve(argv.accessToken) : authenticator.interactive()
+  const asyncAuthProvider = argv.accessToken ? Promise.resolve(argv.accessToken) : authenticator.interactiveToken()
 
   return registry
     .get({extensionName: argv.extension})

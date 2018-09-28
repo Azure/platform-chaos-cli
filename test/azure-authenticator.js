@@ -22,7 +22,7 @@ describe('azure-chaos', () => {
 
       const instance = factory.AzureAuthenticator.create()
 
-      instance.interactive()
+      instance.interactiveToken()
         .then((res) => {
           assert.equal(res, 'testAuthType testAuthValue')
         })

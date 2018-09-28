@@ -11,5 +11,8 @@ module.exports = {
   start: require('./commands/start').handler,
   stop: require('./commands/stop').handler,
   resgen: require('./commands/resgen').handler,
-  token: require('./commands/token').handler
+  token: require('./commands/token').handler,
+  randfuture: require('./commands/randfuture').handler,
+  randwindow: require('./commands/randwindow').handler,
+  randonday: require('./commands/randonday').handler
 }
